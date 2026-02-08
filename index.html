@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kartu Valentine Simpel</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #ff9a9e, #fecfef);
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Changed to min-height for better scrolling */
+            overflow: auto;
+            transition: all 0.5s ease;
+        }
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            width: 90%;
+            margin: 20px;
+            transition: all 0.5s ease;
+        }
+        .envelope {
+            width: 200px;
+            height: 150px;
+            background: #d32f2f;
+            position: relative;
+            margin: 0 auto 20px;
+            border-radius: 10px 10px 0 0;
+            transition: transform 0.5s ease;
+        }
+        .envelope::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #b71c1c;
+            clip-path: polygon(0 0, 50% 50%, 100% 0);
+            transition: clip-path 0.5s ease;
+        }
+        .envelope.open {
+            transform: rotateX(180deg);
+        }
+        .envelope.open::after {
+            clip-path: polygon(0 0, 50% 100%, 100% 0);
+        }
+        button {
+            background: #e91e63;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+            transition: background 0.3s ease;
+        }
+        button:hover {
+            background: #c2185b;
+        }
+        .message {
+            display: none;
+            margin-top: 20px;
+        }
+        .poem {
+            font-style: italic;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            opacity: 0;
+            transition: opacity 1s ease;
+            max-height: 300px; /* Increased height for longer poem */
+            overflow-y: auto; /* Allow vertical scrolling if poem is too long */
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 10px;
+        }
+        .poem.show {
+            opacity: 1;
+        }
+        .playlist {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        .hidden {
+            display: none;
+        }
+        audio {
+            display: none; /* Hidden as background */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="envelope" id="envelope"></div>
+        <button id="openBtn">BUKA</button>
+        <div id="valentineText" class="hidden">
+            <h2>Happy Valentine's Day 💖</h2>
+            <button id="messageBtn">Buka Pesan</button>
+        </div>
+        <div id="message" class="message">
+            <h3>UNTUKMU KERTASKU:</h3>
+            <div class="poem" id="poem">
+                Aku tidak ingin kau menjadi bumi,<br>
+                karena aku adalah manusia dan aku takut akan menggangu mu.<br>
+                Aku tidak ingin kau menjadi dunia,<br>
+                karena aku adalah manusia,<br>
+                dan dunia adalah hal berat bagiku.<br>
+                Aku tidak ingin kau menjadi matahari,<br>
+                karena aku adalah manusia,<br>
+                aku butuh dirimu,<br>
+                tapi aku juga terkadang mencaci mu.<br>
+                Aku tidak ingin kau menjadi hidup,<br>
+                karena aku aku manusia,<br>
+                yang fana dan aku tak mau berpisah darimu.<br>
+                Aku tidak ingin kau menjadi apapun itu,<br>
+                baik bumiku,<br>
+                duniaku,<br>
+                atau hidupku.<br>
+                Karena aku manusia.<br>
+                Aku mau kau tetap menjadi seperti yang apa kau miliki.<br>
+                Aku ingin kau tetap menjadi dirimu.<br>
+                Dengan begitu kamu tetap bersamaku dan aku membersamai mu.<br>
+                💕
+            </div>
+            <div class="playlist" id="playlist">
+                <p>BUKA PLAYLISTNYA DONGG:</p>
+                <button onclick="window.open('https://open.spotify.com/playlist/0viFGO3Ea90ErW0b125OjA?si=7851894ad0034b30', '_blank')">Buka Playlist</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Background Audio Lokal -->
+    <audio id="bgAudio" loop>
+        <source src="lagu-romantis.mp3" type="audio/mpeg"> <!-- File MP3 lokal di folder yang sama -->
+        <source src="lagu-romantis.ogg" type="audio/ogg"> <!-- Fallback jika ada file OGG -->
+        Browser kamu tidak mendukung audio.
+    </audio>
+
+    <script>
+        const openBtn = document.getElementById('openBtn');
+        const envelope = document.getElementById('envelope');
+        const valentineText = document.getElementById('valentineText');
+        const messageBtn = document.getElementById('messageBtn');
+        const message = document.getElementById('message');
+        const poem = document.getElementById('poem');
+        const playlist = document.getElementById('playlist');
+        const bgAudio = document.getElementById('bgAudio');
+
+        openBtn.addEventListener('click', () => {
+            envelope.classList.add('open');
+            openBtn.classList.add('hidden');
+            valentineText.classList.remove('hidden');
+        });
+
+        messageBtn.addEventListener('click', () => {
+            valentineText.classList.add('hidden');
+            message.style.display = 'block';
+            // Play background audio
+            bgAudio.play().catch(e => console.log('Autoplay blocked, user interaction needed'));
+            // Show poem after 1 second
+            setTimeout(() => {
+                poem.classList.add('show');
+                // Scroll to playlist after another 2 seconds
+                setTimeout(() => {
+                    playlist.scrollIntoView({ behavior: 'smooth' });
+                }, 2000);
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
